@@ -41,8 +41,16 @@ function formatDate(date) {
 
 function searchCity(city) {
   let apiKey = "deb734a4a90t54bo80eaa3af0c4619aa";
-  let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}`;
-  axios.get(apiUrl).then(refreshWeather);
+  let currentWeatherUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}`;
+  let forecastUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=metric`;
+
+  axios.all([axios.get(currentWeatherUrl), axios.get(forecastUrl)]).then(
+    axios.spread(function (currentWeatherResponse, forecastResponse) {
+      refreshWeather(currentWeatherResponse);
+
+      displayWeatherData(forecastResponse.data);
+    })
+  );
 }
 
 function handleSearchSubmit(event) {
@@ -56,3 +64,19 @@ let searchFormElement = document.querySelector("#search-form");
 searchFormElement.addEventListener("submit", handleSearchSubmit);
 
 searchCity("Paris");
+
+function displayWeatherData(data) {
+  let dailyForecast = data.daily;
+
+  dailyForecast.forEach((day, index) => {
+    let emogiElement = document.getElementById(`forecast-emogi-${index}`);
+    emogiElement.innerHTML = `
+      <img src="${day.condition.icon_url}" alt="${day.condition.icon}">
+      <p class="forecast-details">
+        <span id="max-${index}">${Math.round(
+      day.temperature.maximum
+    )}°</span> &nbsp
+        <span id="min-${index}">${Math.round(day.temperature.minimum)}°</span>
+      </p>`;
+  });
+}
