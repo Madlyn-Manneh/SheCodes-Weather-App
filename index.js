@@ -73,9 +73,9 @@ function displayWeatherData(data) {
     emogiElement.innerHTML = `
       <img src="${day.condition.icon_url}" alt="${day.condition.icon}">
       <p class="forecast-details">
-        <span id="max-${index}">${Math.round(
+        <strong><span id="max-${index}">${Math.round(
       day.temperature.maximum
-    )}°</span> &nbsp
+    )}°</span></strong> &nbsp
         <span id="min-${index}">${Math.round(day.temperature.minimum)}°</span>
       </p>`;
   });
