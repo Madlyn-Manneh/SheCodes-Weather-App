@@ -85,6 +85,16 @@ main {
   margin-top: 16px;
   font-size: 28px;
 }
+.forecast {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.forecast-box {
+  width: 15%;
+  margin: 5px;
+  text-align: center;
+}
 
 footer {
   border-top: 1px solid #f9f7fe;
